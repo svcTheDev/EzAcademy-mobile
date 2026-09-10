@@ -1,60 +1,96 @@
-import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LoginForm } from '../features/auth/components/LoginForm';
+import { theme } from '../constants/theme';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  // Handler temporal de prueba (Simulación)
+  const handleLoginSubmit = (data: { email: string; password: string }) => {
+    setIsLoading(true);
+    setServerError(null);
+
+    // Simulación de respuesta de red (2 segundos)
+    setTimeout(() => {
+      setIsLoading(false);
+
+      // Prueba visual temporal
+      Alert.alert(
+        'Datos capturados correctamente',
+        `Email: ${data.email}\nPassword: ${data.password.replace(/./g, '*')}`
+      );
+    }, 1500);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar sesión</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header con marca EzAcademy */}
+          <View style={styles.headerContainer}>
+            <Text style={styles.brandTitle}>EzAcademy</Text>
+            <Text style={styles.brandBadge}>MOBILE V1</Text>
+          </View>
 
-      <TextInput
-        autoCapitalize="none"
-        keyboardType="email-address"
-        placeholder="Email"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        secureTextEntry
-        style={styles.input}
-      />
-
-      <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Ingresar</Text>
-      </Pressable>
-    </View>
+          {/* Formulario de Login */}
+          <LoginForm
+            onSubmit={handleLoginSubmit}
+            isLoading={isLoading}
+            serverError={serverError}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: "center",
-    padding: 24,
+    backgroundColor: theme.colors.background,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    marginBottom: 24,
-    textAlign: "center",
+  keyboardView: {
+    flex: 1,
   },
-  input: {
-    borderColor: "#cccccc",
-    borderRadius: 6,
-    borderWidth: 1,
-    marginBottom: 12,
-    padding: 12,
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
   },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#2563eb",
-    borderRadius: 6,
-    marginTop: 8,
-    padding: 12,
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl,
   },
-  buttonText: {
-    color: "#ffffff",
-    fontWeight: "600",
+  brandTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: theme.colors.foreground,
+    letterSpacing: 0.5,
+  },
+  brandBadge: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.accent,
+    letterSpacing: 2,
+    marginTop: theme.spacing.xs,
   },
 });
