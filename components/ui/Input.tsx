@@ -27,63 +27,34 @@ export const Input: React.FC<InputProps> = ({
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
 
-      <View style={styles.cubeContainer}>
-        <View
-          pointerEvents="none"
-          style={[
-            styles.cubeFace,
-            { backgroundColor: getEdgeColor(isFocused, !!error) },
-          ]}
-        >
-          <View style={styles.cubeInner} />
-        </View>
-        <View
-          pointerEvents="none"
-          style={[
-            styles.cubeTop,
-            { backgroundColor: getEdgeColor(isFocused, !!error) },
-          ]}
-        >
-          <View style={styles.cubeTopInner} />
-        </View>
-        <View
-          pointerEvents="none"
-          style={[
-            styles.cubeRight,
-            { backgroundColor: getEdgeColor(isFocused, !!error) },
-          ]}
-        >
-          <View style={styles.cubeRightInner} />
-        </View>
-        <TextInput
-          style={[styles.input, style]}
-          placeholderTextColor={theme.colors.mutedForeground}
-          onFocus={(e) => {
-            setIsFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setIsFocused(false);
-            onBlur?.(e);
-          }}
-          {...rest}
-        />
-      </View>
+      <TextInput
+        style={[
+          styles.input,
+          isFocused && styles.focusedInput,
+          !!error && styles.errorInput,
+          style,
+        ]}
+        placeholderTextColor={theme.colors.mutedForeground}
+        onFocus={(e) => {
+          setIsFocused(true);
+          onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setIsFocused(false);
+          onBlur?.(e);
+        }}
+        {...rest}
+      />
 
       {!!error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
 
-const getEdgeColor = (isFocused: boolean, hasError: boolean) => {
-  if (hasError) return theme.colors.destructive;
-  return isFocused ? theme.colors.cubeFocus : theme.colors.cubeInputEdge;
-};
-
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   label: {
     color: theme.colors.foreground,
@@ -91,67 +62,22 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: theme.spacing.xs,
   },
-  cubeContainer: {
-    minHeight: 52,
-    position: 'relative',
-  },
   input: {
-    backgroundColor: 'transparent',
+    backgroundColor: theme.colors.card,
     color: theme.colors.foreground,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: 14,
+    paddingVertical: theme.spacing.md,
     fontSize: 16,
-    minHeight: 52,
-    zIndex: 1,
+    minHeight: 48,
   },
-  cubeFace: {
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
+  focusedInput: {
+    borderColor: theme.colors.accent,
   },
-  cubeInner: {
-    backgroundColor: theme.colors.cubeFace,
-    bottom: 2,
-    left: 2,
-    position: 'absolute',
-    right: 2,
-    top: 2,
-  },
-  cubeTop: {
-    height: 8,
-    left: 5,
-    position: 'absolute',
-    right: -5,
-    top: -8,
-    transform: [{ skewX: '-45deg' }],
-    zIndex: 0,
-  },
-  cubeTopInner: {
-    backgroundColor: theme.colors.cubeFace,
-    bottom: 2,
-    left: 2,
-    position: 'absolute',
-    right: 2,
-    top: 2,
-  },
-  cubeRight: {
-    bottom: 5,
-    position: 'absolute',
-    right: -8,
-    top: -5,
-    transform: [{ skewY: '-45deg' }],
-    width: 8,
-    zIndex: 0,
-  },
-  cubeRightInner: {
-    backgroundColor: theme.colors.cubeFace,
-    bottom: 2,
-    left: 0,
-    position: 'absolute',
-    right: 2,
-    top: 2,
+  errorInput: {
+    borderColor: theme.colors.destructive,
   },
   errorText: {
     color: theme.colors.destructive,

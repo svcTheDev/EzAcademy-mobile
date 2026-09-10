@@ -1,37 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
+  SafeAreaView,
   View,
   Text,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LoginForm } from '../features/auth/components/LoginForm';
 import { theme } from '../constants/theme';
+import { useAuth } from '../features/auth/context/AuthContext';
 
 export default function LoginScreen() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
-  // Handler temporal de prueba (Simulación)
-  const handleLoginSubmit = (data: { email: string; password: string }) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    // Simulación de respuesta de red (2 segundos)
-    setTimeout(() => {
-      setIsLoading(false);
-
-      // Prueba visual temporal
-      Alert.alert(
-        'Datos capturados correctamente',
-        `Email: ${data.email}\nPassword: ${data.password.replace(/./g, '*')}`
-      );
-    }, 1500);
-  };
+  const { login, status, error } = useAuth();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -52,9 +34,9 @@ export default function LoginScreen() {
 
           {/* Formulario de Login */}
           <LoginForm
-            onSubmit={handleLoginSubmit}
-            isLoading={isLoading}
-            serverError={serverError}
+            onSubmit={login}
+            isLoading={status === 'loading'}
+            serverError={error}
           />
         </ScrollView>
       </KeyboardAvoidingView>

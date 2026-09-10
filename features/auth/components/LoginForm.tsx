@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
 import { Input } from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
 import { theme } from '../../../constants/theme';
@@ -58,7 +57,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View style={styles.cardContainer}>
+      <Text style={styles.title}>Iniciar Sesión</Text>
+      <Text style={styles.subtitle}>Ingresa a tu cuenta de EzAcademy</Text>
+
+      {/* Mensaje de error general del servidor V1 */}
       {!!serverError && (
         <View style={styles.errorBox}>
           <Text style={styles.errorBoxText}>{serverError}</Text>
@@ -66,7 +69,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       )}
 
       <Input
-        placeholder="Dirección de email"
+        label="Correo electrónico"
+        placeholder="ejemplo@correo.com"
         value={email}
         onChangeText={(text) => {
           setEmail(text);
@@ -79,7 +83,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       />
 
       <Input
-        placeholder="Contraseña"
+        label="Contraseña"
+        placeholder="••••••••"
         value={password}
         onChangeText={(text) => {
           setPassword(text);
@@ -90,35 +95,42 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       />
 
       <Button
-        title="Iniciar sesión"
+        title="Ingresar"
         onPress={handleSubmit}
         isLoading={isLoading}
         style={styles.submitButton}
       />
-
-      <Link href="/" asChild>
-        <Text style={styles.credits}>Volver al inicio</Text>
-      </Link>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  formContainer: {
-    alignSelf: 'center',
-    maxWidth: 300,
-    paddingBottom: theme.spacing.lg,
-    paddingHorizontal: 15,
-    paddingTop: 64,
+  cardContainer: {
+    backgroundColor: theme.colors.card,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     width: '100%',
   },
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: theme.colors.foreground,
+    marginBottom: theme.spacing.xs,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: theme.colors.mutedForeground,
+    marginBottom: theme.spacing.lg,
+  },
   errorBox: {
-    backgroundColor: 'transparent',
+    backgroundColor: `${theme.colors.destructive}20`,
     borderWidth: 1,
     borderColor: theme.colors.destructive,
-    borderRadius: 0,
-    padding: theme.spacing.sm,
-    marginBottom: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
   },
   errorBoxText: {
     color: theme.colors.destructive,
@@ -126,15 +138,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   submitButton: {
-    marginTop: -theme.spacing.sm,
-  },
-  credits: {
-    color: theme.colors.foreground,
-    fontFamily: 'monospace',
-    fontSize: 11,
-    marginTop: 40,
-    opacity: 0.6,
-    textAlign: 'center',
-    textDecorationLine: 'none',
+    marginTop: theme.spacing.sm,
   },
 });

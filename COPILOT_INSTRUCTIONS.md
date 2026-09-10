@@ -199,6 +199,57 @@ si eso termina mezclando funcionalidades diferentes.
 
 Los elementos realmente compartidos pueden permanecer en carpetas globales.
 
+app/
+    Navigation / Routes
+
+features/
+    auth/
+    courses/
+    enrollments/
+    sessions/
+
+components/
+    UI reutilizable
+
+services/
+    API / HTTP
+
+types/
+    TypeScript models
+
+utils/
+    utilidades generales
+
+assets/
+
+
+### 5.2 Definir estructura de carpetas y responsabilidades
+
+features/
+├── auth/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── types/
+│
+├── courses/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── types/
+│
+├── enrollments/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── types/
+│
+└── sessions/
+    ├── components/
+    ├── hooks/
+    ├── services/
+    └── types/
+
 ---
 
 # 6. Navegación

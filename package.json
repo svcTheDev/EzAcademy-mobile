@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "axios": "^1.20.0",
     "expo": "^57.0.19",
     "expo-router": "~57.0.19",
     "expo-status-bar": "~57.0.1",
