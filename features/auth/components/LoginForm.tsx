@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Input } from '../../../components/ui/Input';
-import { Button } from '../../../components/ui/Button';
-import { theme } from '../../../constants/theme';
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Input } from "../../../components/ui/Input";
+import { Button } from "../../../components/ui/Button";
+import { theme } from "../../../constants/theme";
+import { useRouter } from "expo-router";
 
 interface LoginFormProps {
   onSubmit?: (data: { email: string; password: string }) => void;
@@ -15,35 +16,37 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   isLoading = false,
   serverError = null,
 }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const router = useRouter();
 
   const validate = (): boolean => {
     let isValid = true;
-    setEmailError('');
-    setPasswordError('');
+    setEmailError("");
+    setPasswordError("");
 
     // Validación básica de Email
     if (!email.trim()) {
-      setEmailError('El correo electrónico es requerido');
+      setEmailError("El correo electrónico es requerido");
       isValid = false;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
-        setEmailError('Ingresa un correo electrónico válido');
+        setEmailError("Ingresa un correo electrónico válido");
         isValid = false;
       }
     }
 
     // Validación básica de Contraseña
     if (!password) {
-      setPasswordError('La contraseña es requerida');
+      setPasswordError("La contraseña es requerida");
       isValid = false;
     } else if (password.length < 6) {
-      setPasswordError('La contraseña debe tener al menos 6 caracteres');
+      setPasswordError("La contraseña debe tener al menos 6 caracteres");
       isValid = false;
     }
 
@@ -52,9 +55,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const handleSubmit = () => {
     if (validate()) {
+      router.push("/home");
       onSubmit?.({ email: email.trim(), password });
     }
   };
+  
 
   return (
     <View style={styles.cardContainer}>
@@ -74,7 +79,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         value={email}
         onChangeText={(text) => {
           setEmail(text);
-          if (emailError) setEmailError('');
+          if (emailError) setEmailError("");
         }}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -88,7 +93,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         value={password}
         onChangeText={(text) => {
           setPassword(text);
-          if (passwordError) setPasswordError('');
+          if (passwordError) setPasswordError("");
         }}
         secureTextEntry
         error={passwordError}
@@ -111,11 +116,11 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    width: '100%',
+    width: "100%",
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
     color: theme.colors.foreground,
     marginBottom: theme.spacing.xs,
   },
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
   errorBoxText: {
     color: theme.colors.destructive,
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
   submitButton: {
     marginTop: theme.spacing.sm,
